@@ -1,0 +1,24 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.page-number, .page-nav {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.page-number:hover, .page-nav:hover {
+  background: var(--secondary);
+}
+
+.page-number.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
