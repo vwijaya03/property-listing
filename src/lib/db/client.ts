@@ -1,7 +1,7 @@
 import { MongoClient, Db } from 'mongodb';
 
 const uri = process.env.DB_URL || 'mongodb://localhost:27017';
-const dbName = process.env.DB_DATABASE || 'real-estate';
+const dbName = process.env.DB_DATABASE || 'daftarproperty';
 
 let client: MongoClient;
 let cachedDb: Db | null = null; // Explicitly type as Db

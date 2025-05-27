@@ -44,18 +44,15 @@ export const load = async ({ url }: LoadEvent): Promise<PageData> => {
       : {})
   };
 
-  console.log('Query:', query);
-
   // Parse sort string
   const [sortField, sortDir] = sort.split(':');
-  console.log(sortField, sortDir);
 
   const db = await connectToDatabase();
 
   const [properties, total, cities, lotSizes, facings, prices, sorts] = await Promise.all([
     db.collection<Property>('properties')
       .find(query)
-      .sort({ 'updatedAt': -1 })
+      .sort([[sortField, sortDir === 'asc' ? 1 : -1]])
       .skip(skip)
       .limit(ITEMS_PER_PAGE)
       .toArray(),

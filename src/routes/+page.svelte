@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+
   import PropertyCard from '$lib/components/PropertyCard.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import { goto } from '$app/navigation';
   import type { Property, City, LotSize, Facing, PropertyPrice, Sort } from '$lib/types/property.ts';
 
   const { data } = $props();
@@ -23,7 +25,7 @@
   let selectedFacing = $state('');
   let selectedMinPrice = $state('');
   let selectedMaxPrice = $state('');
-  let sort = $state('');
+  let selectedSort = $state('');
 
   let modifiedCities = $derived.by(() => {
 		const query = searchCity;
@@ -40,9 +42,9 @@
 
   function handleSortChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    sort = selectElement.value;
+    selectedSort = selectElement.value;
     const newUrl = new URL(window.location.href);
-    newUrl.searchParams.set('sort', sort);
+    newUrl.searchParams.set('sort', selectedSort);
     
     goto(`${newUrl.pathname}?${newUrl.searchParams.toString()}`);
   }
@@ -70,12 +72,25 @@
     if (selectedMaxPrice) searchParams.set('max_price', selectedMaxPrice);
     else searchParams.delete('max_price');
 
-    if (sort) searchParams.set('sort', sort);
+    if (selectedSort) searchParams.set('sort', selectedSort);
     else searchParams.delete('sort');
 
+    console.log('Search Params:', searchParams.toString());
     // Navigate with merged params
     goto(`${currentUrl.pathname}?${searchParams.toString()}`);
   }
+
+  onMount(() => {
+		// Initialize the selected city from the URL if available
+    const urlParams = new URLSearchParams(window.location.search);
+    selectedCity = urlParams.get('city') || '';
+    selectedLotSize = urlParams.get('lot_size') || '';
+    selectedFacing = urlParams.get('facing') || '';
+    selectedMinPrice = urlParams.get('min_price') || '';
+    selectedMaxPrice = urlParams.get('max_price') || '';
+    selectedSort = urlParams.get('sort') || '';
+    q = urlParams.get('q') || '';
+	});
 </script>
 
 <style>
@@ -149,9 +164,21 @@
                 <!-- Kota -->
                 <div class="form-group categories">
                   <div class="nice-select form-control wide">
-                    <span class="current">Kota</span>
+                    <!-- Show selected city name or fallback -->
+                    <span class="current">
+                      {#if selectedCity}
+                        {#if cities.find(c => c.cityId.toString() === selectedCity)}
+                          {cities.find(c => c.cityId.toString() === selectedCity)?.cityName}
+                        {:else}
+                          Kota
+                        {/if}
+                      {:else}
+                        Kota
+                      {/if}
+                    </span>
+
                     <ul class="list" style="overflow-y: auto; height: 200px;">
-                      <!-- Search input: remove click event, it's not needed -->
+                      <!-- Search input -->
                       <li class="option search-input" role="presentation">
                         <input 
                           type="text" 
@@ -161,14 +188,15 @@
                           onkeydown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault();
-                              selectedCity = searchCity;
+                              const matched = modifiedCities.find(c => c.cityName.toLowerCase().includes(searchCity.toLowerCase()));
+                              if (matched) selectedCity = matched.cityId.toString();
                             }
                           }} 
                           onclick={(e) => e.stopPropagation()}
                         />
                       </li>
 
-                      <!-- Interactive city options -->
+                      <!-- City list -->
                       {#each modifiedCities as city}
                         <li
                           class="option"
@@ -191,18 +219,30 @@
                 <!-- Luas Tanah -->
                 <div class="form-group categories">
                   <div class="nice-select form-control wide">
-                    <span class="current">Luas Tanah</span>
+                    <span class="current">
+                      {#if selectedLotSize}
+                        {#if lotSizes.find(s => s.value === selectedLotSize)}
+                          {lotSizes.find(s => s.value === selectedLotSize)?.title}
+                        {:else}
+                          Luas Tanah
+                        {/if}
+                      {:else}
+                        Luas Tanah
+                      {/if}
+                    </span>
+
                     <ul class="list">
-                      <li 
+                      <li
                         role="presentation"
                         class="option"
                         onclick={() => selectedLotSize = ''}
                       >
-                        Pilih Lunas Tanah
+                        Pilih Luas Tanah
                       </li>
+
                       {#each lotSizes as size}
-                        <li 
-                          class="option" 
+                        <li
+                          class="option"
                           role="option"
                           aria-selected={selectedLotSize === size.value}
                           onclick={() => selectedLotSize = size.value}
@@ -222,15 +262,27 @@
                 <!-- Hadap -->
                 <div class="form-group beds">
                   <div class="nice-select form-control wide">
-                    <span class="current">Hadap</span>
+                    <span class="current">
+                      {#if selectedFacing}
+                        {#if facings.find(f => f.value === selectedFacing)}
+                          {facings.find(f => f.value === selectedFacing)?.title}
+                        {:else}
+                          Hadap
+                        {/if}
+                      {:else}
+                        Hadap
+                      {/if}
+                    </span>
+
                     <ul class="list">
-                      <li 
-                        class="option" 
+                      <li
+                        class="option"
                         onclick={() => selectedFacing = ''}
                         role="presentation"
                       >
                         Pilih Hadap
                       </li>
+
                       {#each facings as face}
                         <li 
                           class="option"
@@ -253,17 +305,29 @@
                 <!-- Harga Min (≥) -->
                 <div class="form-group bath">
                   <div class="nice-select form-control wide">
-                    <span class="current">Harga Min</span>
+                    <span class="current">
+                      {#if selectedMinPrice}
+                        {#if prices.find(p => p.numericValue.toString() === selectedMinPrice)}
+                          ≥ {prices.find(p => p.numericValue.toString() === selectedMinPrice)?.title}
+                        {:else}
+                          Harga Min
+                        {/if}
+                      {:else}
+                        Harga Min
+                      {/if}
+                    </span>
+
                     <ul class="list">
-                      <li 
+                      <li
                         class="option"
                         onclick={() => selectedMinPrice = ''}
                         role="presentation"
                       >
                         Pilih Harga Min
                       </li>
+
                       {#each prices as price}
-                        <li 
+                        <li
                           class="option"
                           role="option"
                           aria-selected={selectedMinPrice === price.numericValue.toString()}
@@ -284,15 +348,29 @@
                 <!-- Harga Max (≤) -->
                 <div class="form-group bath">
                   <div class="nice-select form-control wide">
-                    <span class="current">Harga Max</span>
+                    <span class="current">
+                      {#if selectedMaxPrice}
+                        {#if prices.find(p => p.numericValue.toString() === selectedMaxPrice)}
+                          ≤ {prices.find(p => p.numericValue.toString() === selectedMaxPrice)?.title}
+                        {:else}
+                          Harga Max
+                        {/if}
+                      {:else}
+                        Harga Max
+                      {/if}
+                    </span>
+
                     <ul class="list">
-                      <li 
+                      <li
                         class="option"
                         onclick={() => selectedMaxPrice = ''}
                         role="presentation"
-                      >Pilih Harga Max</li>
+                      >
+                        Pilih Harga Max
+                      </li>
+
                       {#each prices as price}
-                        <li 
+                        <li
                           class="option"
                           role="option"
                           aria-selected={selectedMaxPrice === price.numericValue.toString()}
@@ -302,7 +380,9 @@
                               selectedMaxPrice = price.numericValue.toString();
                             }
                           }}
-                        >≤ {price.title}</li>
+                        >
+                          ≤ {price.title}
+                        </li>
                       {/each}
                     </ul>
                   </div>
@@ -343,6 +423,7 @@
                   form-control border-0 bg-transparent shadow-none p-0 m-0 h-auto" 
                   name="sortby"
                   onchange={handleSortChange}
+                  bind:value={selectedSort}
                 >
                   {#each sorts as sort}
                     <option value={sort.value}>{sort.title}</option>
