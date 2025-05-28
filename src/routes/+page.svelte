@@ -26,13 +26,14 @@
   let selectedMinPrice = $state('');
   let selectedMaxPrice = $state('');
   let selectedSort = $state('');
+  let cityDropdownKey = $state(0);
 
   let modifiedCities = $derived.by(() => {
-		const query = searchCity;
-		if (!query) return cities;
-		const lowerCity = query.toLowerCase();
-		return cities.filter(city => city.cityName.toLowerCase().includes(lowerCity));
-	});
+    const keyword = searchCity.trim().toLowerCase();
+    return keyword
+      ? cities.filter(c => c.cityName.toLowerCase().includes(keyword))
+      : cities;
+  });
 
   function handlePageChange(pageNum: number) {
     const newUrl = new URL(window.location.href);
@@ -75,10 +76,42 @@
     if (selectedSort) searchParams.set('sort', selectedSort);
     else searchParams.delete('sort');
 
-    console.log('Search Params:', searchParams.toString());
+    // console.log('Search Params:', searchParams.toString());
     // Navigate with merged params
     goto(`${currentUrl.pathname}?${searchParams.toString()}`);
   }
+
+  async function handleResetFilter() {
+    selectedCity = '';
+    selectedLotSize = '';
+    selectedFacing = '';
+    selectedMinPrice = '';
+    selectedMaxPrice = '';
+    selectedSort = '';
+    q = '';
+
+    cityDropdownKey++;
+
+    // Clear URL params
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('city');
+    currentUrl.searchParams.delete('lot_size');
+    currentUrl.searchParams.delete('facing');
+    currentUrl.searchParams.delete('min_price');
+    currentUrl.searchParams.delete('max_price');
+    currentUrl.searchParams.delete('sort');
+    currentUrl.searchParams.delete('q');
+
+    goto(`${currentUrl.pathname}`);
+  }
+
+  const selectedCityName = $derived.by(() => {
+    // access selectedCity so Svelte tracks it
+    const cityId = selectedCity;
+
+    const city = cities.find(c => c.cityId.toString() === cityId);
+    return city ? city.cityName : 'Kota';
+  });
 
   onMount(() => {
 		// Initialize the selected city from the URL if available
@@ -162,59 +195,50 @@
                 <!--/ End Form Lookin for -->
 
                 <!-- Kota -->
-                <div class="form-group categories">
-                  <div class="nice-select form-control wide">
-                    <!-- Show selected city name or fallback -->
-                    <span class="current">
-                      {#if selectedCity}
-                        {#if cities.find(c => c.cityId.toString() === selectedCity)}
-                          {cities.find(c => c.cityId.toString() === selectedCity)?.cityName}
-                        {:else}
-                          Kota
-                        {/if}
-                      {:else}
-                        Kota
-                      {/if}
-                    </span>
+                {#key cityDropdownKey}
+                  <div class="form-group location">
+                    <div class="nice-select form-control wide">
+                      <!-- Show selected city name or fallback -->
+                      <span class="current">{selectedCityName}</span>
 
-                    <ul class="list" style="overflow-y: auto; height: 200px;">
-                      <!-- Search input -->
-                      <li class="option search-input" role="presentation">
-                        <input 
-                          type="text" 
-                          placeholder="Cari Kota..." 
-                          bind:value={searchCity} 
-                          class="form-control" 
-                          onkeydown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              const matched = modifiedCities.find(c => c.cityName.toLowerCase().includes(searchCity.toLowerCase()));
-                              if (matched) selectedCity = matched.cityId.toString();
-                            }
-                          }} 
-                          onclick={(e) => e.stopPropagation()}
-                        />
-                      </li>
-
-                      <!-- City list -->
-                      {#each modifiedCities as city}
-                        <li
-                          class="option"
-                          role="option"
-                          aria-selected={selectedCity === city.cityId.toString()}
-                          onclick={() => selectedCity = city.cityId.toString()}
-                          onkeydown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              selectedCity = city.cityId.toString();
-                            }
-                          }}
-                        >
-                          {city.cityName}
+                      <ul class="list" style="overflow-y: auto; height: 200px;">
+                        <!-- Search input -->
+                        <li class="option search-input" role="presentation">
+                          <input 
+                            type="text" 
+                            placeholder="Cari Kota..." 
+                            bind:value={searchCity} 
+                            class="form-control" 
+                            onkeydown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                const matched = modifiedCities.find(c => c.cityName.toLowerCase().includes(searchCity.toLowerCase()));
+                                if (matched) selectedCity = matched.cityId.toString();
+                              }
+                            }} 
+                            onclick={(e) => e.stopPropagation()}
+                          />
                         </li>
-                      {/each}
-                    </ul>
+
+                        {#each modifiedCities as city (city._id)}
+                          <li
+                            class="option"
+                            role="option"
+                            aria-selected={selectedCity === city.cityId.toString()}
+                            onclick={() => selectedCity = city.cityId.toString()}
+                            onkeydown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                selectedCity = city.cityId.toString();
+                              }
+                            }}
+                          >
+                            {city.cityName}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
                   </div>
-                </div>
+                {/key}
 
                 <!-- Luas Tanah -->
                 <div class="form-group categories">
@@ -398,6 +422,17 @@
                   onclick={handleSearch}
                 >
                   Search
+                </button>
+              </div>
+            </div>
+
+            <div class="col-lg-12 no-pds">
+              <div class="at-col-default-mar">
+                <button 
+                  class="btn btn-default hvr-bounce-to-right"
+                  onclick={handleResetFilter}
+                >
+                  Reset Filter
                 </button>
               </div>
             </div>
