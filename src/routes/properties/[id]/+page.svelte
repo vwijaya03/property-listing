@@ -2,21 +2,26 @@
   import type { Property } from '$lib/types/property.ts';
   import { priceToFormattedString } from '$lib/utils/helpers.ts';
   
-  export let data: { property: Property };
+  const { data } = $props();
+  // export let data: { property: Property };
 
   const p = data.property;
+  const instagramUrl = data.instagramUrl;
+  const whatsappUrl = data.whatsappUrl;
 
-  let activeIndex = 0;
+  let activeIndex = $state(0);
 
   function goTo(index: number) {
     activeIndex = index;
   }
 
-  function prev() {
+  function prev(e: MouseEvent) {
+    e.preventDefault();
     activeIndex = (activeIndex - 1 + p.pictureUrls.length) % p.pictureUrls.length;
   }
 
-  function next() {
+  function next(e: MouseEvent) {
+    e.preventDefault();
     activeIndex = (activeIndex + 1) % p.pictureUrls.length;
   }
 </script>
@@ -75,10 +80,10 @@
                   {/each}
 
                   <!-- Controls -->
-                  <a class="carousel-control left" href="/#" on:click|preventDefault={prev} aria-label="ctrl-left">
+                  <a class="carousel-control left" href="/#" onclick={(e) => prev(e)} aria-label="ctrl-left">
                     <i class="fa fa-angle-left"></i>
                   </a>
-                  <a class="carousel-control right" href="/#" on:click|preventDefault={next} aria-label="ctrl-right">
+                  <a class="carousel-control right" href="/#" onclick={(e) => next(e)} aria-label="ctrl-right">
                     <i class="fa fa-angle-right"></i>
                   </a>
                 </div>
@@ -89,7 +94,7 @@
                     <li class="list-inline-item {index === activeIndex ? 'active' : ''}">
                       <button
                         type="button"
-                        on:click={() => goTo(index)}
+                        onclick={() => goTo(index)}
                         class="{index === activeIndex ? 'selected' : ''} bg-transparent border-0 p-0"
                         aria-label={`Show slide ${index + 1}`}
                       >
@@ -172,10 +177,10 @@
                     <h4>Hubungi Kami</h4>
                   </div>
                   <div class="col-lg-12 col-md-12">
-                    <a href="#listing-location" class="link-hover-grey">Whatsapp</a>
+                    <a href="{whatsappUrl}" class="link-hover-grey">Whatsapp</a>
                   </div>
                   <div class="col-lg-12 col-md-12">
-                    <a href="#listing-location" class="link-hover-grey">Instagram</a>
+                    <a href="{instagramUrl}" class="link-hover-grey">Instagram</a>
                   </div>
                 </div>
               </div>

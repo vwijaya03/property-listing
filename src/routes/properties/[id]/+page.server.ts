@@ -3,9 +3,13 @@ import { error } from '@sveltejs/kit';
 import type { LoadEvent } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
 
-export const load = async ({ params }: LoadEvent) => {
+export const load = async ({ params, url }: LoadEvent) => {
   const db = await connectToDatabase();
   const id = params.id ?? '';
+  const instagramUrl = 'https://www.instagram.com/moruma.id/?igshid=YmMyMTA2M2Y=';
+  const whatsappApiUrl = 'https://api.whatsapp.com/send?phone=628175175118&text='
+  const message = `Saya tertarik dengan properti ini: ${url.href}`;
+  const whatsappUrl = `${whatsappApiUrl}${encodeURIComponent(message)}`;
 
   const property = await db.collection('properties').findOne({ _id: new ObjectId(id) });
 
@@ -14,6 +18,8 @@ export const load = async ({ params }: LoadEvent) => {
   }
 
   return {
-    property: JSON.parse(JSON.stringify(property))
+    property: JSON.parse(JSON.stringify(property)),
+    instagramUrl,
+    whatsappUrl
   };
 };
