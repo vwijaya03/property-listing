@@ -1,17 +1,12 @@
 <script lang="ts">
   // Static footer
+  const currentYear = new Date().getFullYear();
 </script>
 
 <footer class="first-footer">
   <div class="second-footer">
     <div class="container">
-      <p>2021 © Copyright - All Rights Reserved.</p>
-      <ul class="netsocials">
-        <li><a href="/#" aria-label="fa-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-        <li><a href="/#" aria-label="fa-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-        <li><a href="/#" aria-label="fa-instagram"><i class="fab fa-instagram"></i></a></li>
-        <li><a href="/#" aria-label="fa-youtube"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
-      </ul>
+      <p>{currentYear || 2025} © Copyright PT. Moru Moruma Indonesia - All Rights Reserved.</p>
     </div>
   </div>
 </footer>

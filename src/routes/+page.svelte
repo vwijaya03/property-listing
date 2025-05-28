@@ -76,6 +76,8 @@
     if (selectedSort) searchParams.set('sort', selectedSort);
     else searchParams.delete('sort');
 
+    searchParams.set('page', '1');
+
     // console.log('Search Params:', searchParams.toString());
     // Navigate with merged params
     goto(`${currentUrl.pathname}?${searchParams.toString()}`);
@@ -238,179 +240,179 @@
                       </ul>
                     </div>
                   </div>
-                {/key}
 
-                <!-- Luas Tanah -->
-                <div class="form-group categories">
-                  <div class="nice-select form-control wide">
-                    <span class="current">
-                      {#if selectedLotSize}
-                        {#if lotSizes.find(s => s.value === selectedLotSize)}
-                          {lotSizes.find(s => s.value === selectedLotSize)?.title}
+                  <!-- Luas Tanah -->
+                  <div class="form-group categories">
+                    <div class="nice-select form-control wide">
+                      <span class="current">
+                        {#if selectedLotSize}
+                          {#if lotSizes.find(s => s.value === selectedLotSize)}
+                            {lotSizes.find(s => s.value === selectedLotSize)?.title}
+                          {:else}
+                            Luas Tanah
+                          {/if}
                         {:else}
                           Luas Tanah
                         {/if}
-                      {:else}
-                        Luas Tanah
-                      {/if}
-                    </span>
+                      </span>
 
-                    <ul class="list">
-                      <li
-                        role="presentation"
-                        class="option"
-                        onclick={() => selectedLotSize = ''}
-                      >
-                        Pilih Luas Tanah
-                      </li>
-
-                      {#each lotSizes as size}
+                      <ul class="list">
                         <li
+                          role="presentation"
                           class="option"
-                          role="option"
-                          aria-selected={selectedLotSize === size.value}
-                          onclick={() => selectedLotSize = size.value}
-                          onkeydown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              selectedLotSize = size.value;
-                            }
-                          }}
+                          onclick={() => selectedLotSize = ''}
                         >
-                          {size.title}
+                          Pilih Luas Tanah
                         </li>
-                      {/each}
-                    </ul>
-                  </div>
-                </div>
 
-                <!-- Hadap -->
-                <div class="form-group beds">
-                  <div class="nice-select form-control wide">
-                    <span class="current">
-                      {#if selectedFacing}
-                        {#if facings.find(f => f.value === selectedFacing)}
-                          {facings.find(f => f.value === selectedFacing)?.title}
+                        {#each lotSizes as size}
+                          <li
+                            class="option"
+                            role="option"
+                            aria-selected={selectedLotSize === size.value}
+                            onclick={() => selectedLotSize = size.value}
+                            onkeydown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                selectedLotSize = size.value;
+                              }
+                            }}
+                          >
+                            {size.title}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Hadap -->
+                  <div class="form-group beds">
+                    <div class="nice-select form-control wide">
+                      <span class="current">
+                        {#if selectedFacing}
+                          {#if facings.find(f => f.value === selectedFacing)}
+                            {facings.find(f => f.value === selectedFacing)?.title}
+                          {:else}
+                            Hadap
+                          {/if}
                         {:else}
                           Hadap
                         {/if}
-                      {:else}
-                        Hadap
-                      {/if}
-                    </span>
+                      </span>
 
-                    <ul class="list">
-                      <li
-                        class="option"
-                        onclick={() => selectedFacing = ''}
-                        role="presentation"
-                      >
-                        Pilih Hadap
-                      </li>
-
-                      {#each facings as face}
-                        <li 
+                      <ul class="list">
+                        <li
                           class="option"
-                          role="option"
-                          aria-selected={selectedFacing === face.value}
-                          onclick={() => selectedFacing = face.value}
-                          onkeydown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              selectedFacing = face.value;
-                            }
-                          }}
+                          onclick={() => selectedFacing = ''}
+                          role="presentation"
                         >
-                          {face.title}
+                          Pilih Hadap
                         </li>
-                      {/each}
-                    </ul>
-                  </div>
-                </div>
 
-                <!-- Harga Min (≥) -->
-                <div class="form-group bath">
-                  <div class="nice-select form-control wide">
-                    <span class="current">
-                      {#if selectedMinPrice}
-                        {#if prices.find(p => p.numericValue.toString() === selectedMinPrice)}
-                          ≥ {prices.find(p => p.numericValue.toString() === selectedMinPrice)?.title}
+                        {#each facings as face}
+                          <li 
+                            class="option"
+                            role="option"
+                            aria-selected={selectedFacing === face.value}
+                            onclick={() => selectedFacing = face.value}
+                            onkeydown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                selectedFacing = face.value;
+                              }
+                            }}
+                          >
+                            {face.title}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Harga Min (≥) -->
+                  <div class="form-group bath">
+                    <div class="nice-select form-control wide">
+                      <span class="current">
+                        {#if selectedMinPrice}
+                          {#if prices.find(p => p.numericValue.toString() === selectedMinPrice)}
+                            ≥ {prices.find(p => p.numericValue.toString() === selectedMinPrice)?.title}
+                          {:else}
+                            Harga Min
+                          {/if}
                         {:else}
                           Harga Min
                         {/if}
-                      {:else}
-                        Harga Min
-                      {/if}
-                    </span>
+                      </span>
 
-                    <ul class="list">
-                      <li
-                        class="option"
-                        onclick={() => selectedMinPrice = ''}
-                        role="presentation"
-                      >
-                        Pilih Harga Min
-                      </li>
-
-                      {#each prices as price}
+                      <ul class="list">
                         <li
                           class="option"
-                          role="option"
-                          aria-selected={selectedMinPrice === price.numericValue.toString()}
-                          onclick={() => selectedMinPrice = price.numericValue.toString()}
-                          onkeydown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              selectedMinPrice = price.numericValue.toString();
-                            }
-                          }}
+                          onclick={() => selectedMinPrice = ''}
+                          role="presentation"
                         >
-                          ≥ {price.title}
+                          Pilih Harga Min
                         </li>
-                      {/each}
-                    </ul>
-                  </div>
-                </div>
 
-                <!-- Harga Max (≤) -->
-                <div class="form-group bath">
-                  <div class="nice-select form-control wide">
-                    <span class="current">
-                      {#if selectedMaxPrice}
-                        {#if prices.find(p => p.numericValue.toString() === selectedMaxPrice)}
-                          ≤ {prices.find(p => p.numericValue.toString() === selectedMaxPrice)?.title}
+                        {#each prices as price}
+                          <li
+                            class="option"
+                            role="option"
+                            aria-selected={selectedMinPrice === price.numericValue.toString()}
+                            onclick={() => selectedMinPrice = price.numericValue.toString()}
+                            onkeydown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                selectedMinPrice = price.numericValue.toString();
+                              }
+                            }}
+                          >
+                            ≥ {price.title}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Harga Max (≤) -->
+                  <div class="form-group bath">
+                    <div class="nice-select form-control wide">
+                      <span class="current">
+                        {#if selectedMaxPrice}
+                          {#if prices.find(p => p.numericValue.toString() === selectedMaxPrice)}
+                            ≤ {prices.find(p => p.numericValue.toString() === selectedMaxPrice)?.title}
+                          {:else}
+                            Harga Max
+                          {/if}
                         {:else}
                           Harga Max
                         {/if}
-                      {:else}
-                        Harga Max
-                      {/if}
-                    </span>
+                      </span>
 
-                    <ul class="list">
-                      <li
-                        class="option"
-                        onclick={() => selectedMaxPrice = ''}
-                        role="presentation"
-                      >
-                        Pilih Harga Max
-                      </li>
-
-                      {#each prices as price}
+                      <ul class="list">
                         <li
                           class="option"
-                          role="option"
-                          aria-selected={selectedMaxPrice === price.numericValue.toString()}
-                          onclick={() => selectedMaxPrice = price.numericValue.toString()}
-                          onkeydown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              selectedMaxPrice = price.numericValue.toString();
-                            }
-                          }}
+                          onclick={() => selectedMaxPrice = ''}
+                          role="presentation"
                         >
-                          ≤ {price.title}
+                          Pilih Harga Max
                         </li>
-                      {/each}
-                    </ul>
+
+                        {#each prices as price}
+                          <li
+                            class="option"
+                            role="option"
+                            aria-selected={selectedMaxPrice === price.numericValue.toString()}
+                            onclick={() => selectedMaxPrice = price.numericValue.toString()}
+                            onkeydown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                selectedMaxPrice = price.numericValue.toString();
+                              }
+                            }}
+                          >
+                            ≤ {price.title}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
                   </div>
-                </div>
+                {/key}
               </form>
             </div>
             <!--/ End Search Form -->

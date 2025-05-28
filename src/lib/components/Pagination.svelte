@@ -1,16 +1,20 @@
 <script lang="ts">
-  export let currentPage: number;
-  export let totalPages: number;
-  export let onPageChange: (page: number) => void;
+  const { currentPage, totalPages, onPageChange } = $props();
 
-  $: visiblePages = getVisiblePages(currentPage, totalPages);
+  const visiblePages = $derived.by(() => {
+    const pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else if (currentPage <= 3) {
+      pages.push(1, 2, 3, 4, 5);
+    } else if (currentPage >= totalPages - 2) {
+      for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2);
+    }
 
-  function getVisiblePages(current: number, total: number): number[] {
-    if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1);
-    if (current <= 3) return [1, 2, 3, 4, 5];
-    if (current >= total - 2) return [total - 4, total - 3, total - 2, total - 1, total];
-    return [current - 2, current - 1, current, current + 1, current + 2];
-  }
+    return pages;
+  });
 </script>
 
 <nav aria-label="..." class="agents pt-55">
@@ -20,7 +24,10 @@
       <a
         class="page-link"
         href="/#"
-        on:click|preventDefault={() => currentPage > 1 && onPageChange(currentPage - 1)}
+        onclick={(e) => {
+          e.preventDefault();
+          return currentPage > 1 && onPageChange(currentPage - 1);
+        }}
         tabindex={currentPage === 1 ? -1 : 0}
       >
         Previous
@@ -33,7 +40,10 @@
         <a
           class="page-link"
           href="/#"
-          on:click|preventDefault={() => onPageChange(page)}
+          onclick={(e) => {
+            e.preventDefault();
+            return onPageChange(page);
+          }}
         >
           {page}
           {#if page === currentPage}
@@ -48,7 +58,10 @@
       <a
         class="page-link"
         href="/#"
-        on:click|preventDefault={() => currentPage < totalPages && onPageChange(currentPage + 1)}
+        onclick={(e) => {
+          e.preventDefault();
+          return currentPage < totalPages && onPageChange(currentPage + 1);
+        }}
         tabindex={currentPage === totalPages ? -1 : 0}
       >
         Next

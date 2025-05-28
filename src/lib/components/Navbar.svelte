@@ -8,7 +8,7 @@
       <div class="left-side">
         <!-- Logo -->
         <div id="logo">
-          <a href="/"><img src="/images/logo-red.svg" alt="Logo" /></a>
+          <a href="/"><img style="object-fit: cover; width: 300px; height: 60px;" src="/images/logo-moruma.jpeg" alt="Logo" /></a>
         </div>
 
         <!-- Mobile Navigation -->
@@ -23,7 +23,10 @@
         <!-- Navigation -->
         <nav id="navigation" class="style-1">
           <ul id="responsive">
-            <li><a href="/contact">Contact</a></li>
+            <li><a href="/">Cari Properti</a></li>
+          </ul>
+          <ul id="responsive">
+            <li><a href="/contact">Hubungi</a></li>
           </ul>
         </nav>
       </div>
