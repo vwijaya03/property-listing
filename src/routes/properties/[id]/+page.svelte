@@ -177,9 +177,6 @@
                     <h4>Hubungi Kami</h4>
                   </div>
                   <div class="col-lg-12 col-md-12">
-                    <a href="{whatsappUrl}" class="link-hover-grey">Whatsapp</a>
-                  </div>
-                  <div class="col-lg-12 col-md-12">
                     <a href="{instagramUrl}" class="link-hover-grey">Instagram</a>
                   </div>
                 </div>

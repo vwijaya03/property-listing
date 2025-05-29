@@ -2,7 +2,7 @@ import path from 'path';
 import { createInstance } from 'daftar-properti-sync';
 import { MongoClient } from 'mongodb';
 import { config } from 'dotenv';
-import fs from 'fs/promises';
+// import fs from 'fs/promises';
 
 // Load environment variables
 config({ path: path.join(__dirname, '../.env') });

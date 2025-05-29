@@ -7,7 +7,6 @@
             <h3>Hubungi kami</h3>
 
             <ul>
-              <li><a href="https://wa.me/628175175118">WhatsApp</a></li>
               <li><a href="https://www.instagram.com/moruma.id/?igshid=YmMyMTA2M2Y=">Instagram</a></li>
             </ul>
           </div>
