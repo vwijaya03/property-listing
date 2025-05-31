@@ -1,6 +1,8 @@
+import { ObjectId, Long } from 'mongodb';
+
 export type Property = {
-  _id: string;
-  listingId: number;
+  _id: ObjectId;
+  listingId: Long;
   listingIdStr: string;
   title: string;
   address: string;
@@ -70,4 +72,27 @@ export type Sort = {
   _id?: string;
   title?: string;
   value?: string;
+};
+
+export type AuthValidateResponse = {
+  phone?: string;
+  token?: string;
+};
+
+export type Receipt = {
+  timestamp?: number;
+  clientPhoneHash2x?: string;
+  encryptedPhoneSalt?: string;
+  listingId?: string;
+  encryptedContact?: string;
+  referrerId?: string;
+};
+
+export type ReceiptResponse = {
+  receipt?: Receipt;
+  signature?: string;
+};
+
+export type DecryptResponse = {
+  decryptedContact?: string;
 };
