@@ -26,12 +26,12 @@ async function seedDummyProperties() {
   const dummyProperties: Property[] = [];
   const currentDate = new Date().toISOString();
   
-  // Generate unique listingId
-  const listingId = Long.fromString(`${BigInt(Date.now())}${i}`);
-
   for (let i = 1; i <= 50; i++) {
     const isForRent = Math.random() > 0.7; // 30% chance of being for rent
     const cityId = i % 10 + 1; // Generate city IDs between 1-10
+
+    // Generate unique listingId
+    const listingId = Long.fromString(`${BigInt(Date.now())}${i}`);
 
     dummyProperties.push({
       _id: new ObjectId(),
@@ -89,7 +89,7 @@ async function seedCities() {
   await citiesCollection.deleteMany({});
 
   // Extract unique cityId + cityName from properties collection
-  const uniqueCities = await db.collection('properties').aggregate([
+  const uniqueCities = await db.collection('dummy-properties').aggregate([
     {
       $group: {
         _id: {
