@@ -25,6 +25,9 @@ async function seedDummyProperties() {
 
   const dummyProperties: Property[] = [];
   const currentDate = new Date().toISOString();
+  
+  // Generate unique listingId
+  const listingId = Long.fromString(`${BigInt(Date.now())}${i}`);
 
   for (let i = 1; i <= 50; i++) {
     const isForRent = Math.random() > 0.7; // 30% chance of being for rent
@@ -32,8 +35,8 @@ async function seedDummyProperties() {
 
     dummyProperties.push({
       _id: new ObjectId(),
-      listingId: new Long(),
-      listingIdStr: `prop-${i}`,
+      listingId: listingId,
+      listingIdStr: `prop-${listingId.toString()}`,
       title: `Beautiful Property ${i}`,
       address: `${i}${getRandomElement([' Main St', ' Oak Ave', ' Pine Rd'])}`,
       description: `This is a wonderful property with ${i % 5 + 2} bedrooms in a great location.`,

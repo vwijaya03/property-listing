@@ -1,9 +1,12 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { createInstance } from 'daftar-properti-sync';
 import { MongoClient } from 'mongodb';
 import { config } from 'dotenv';
 // import fs from 'fs/promises';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // Load environment variables
 config({ path: path.join(__dirname, '../.env') });
 
