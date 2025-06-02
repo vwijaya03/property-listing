@@ -29,7 +29,7 @@ export const load = async ({ params, url }: LoadEvent) => {
     decrypt: REVEAL_BASE_URL + '/api/decrypt',
   };
   
-  console.log('apiUrl', apiUrl);
+  // console.log('apiUrl', apiUrl);
   return {
     property: JSON.parse(JSON.stringify(property)),
     instagramUrl,

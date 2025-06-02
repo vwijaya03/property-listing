@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ObjectId, Long } from 'mongodb';
 
 import { connectToDatabase } from '../db/client.ts';
 import type { Property } from '../types/property.ts';
@@ -31,8 +31,8 @@ async function seedDummyProperties() {
     const cityId = i % 10 + 1; // Generate city IDs between 1-10
 
     dummyProperties.push({
-      _id: new ObjectId().toString(),
-      listingId: i,
+      _id: new ObjectId(),
+      listingId: new Long(),
       listingIdStr: `prop-${i}`,
       title: `Beautiful Property ${i}`,
       address: `${i}${getRandomElement([' Main St', ' Oak Ave', ' Pine Rd'])}`,

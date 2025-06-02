@@ -154,7 +154,7 @@
             {#if p.price}
               <li>
                 <span class="font-weight-bold mr-1">Harga:</span>
-                <span class="det">{p.price}</span>
+                <span class="det">{priceToFormattedString(p.price)}</span>
               </li>
             {/if}
 
