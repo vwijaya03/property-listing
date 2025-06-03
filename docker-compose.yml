@@ -1,21 +1,39 @@
-version: '1'
+version: '3.8'
 
 services:
+  worker:
+    build:
+      context: ./synchronizer
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    environment:
+      DB_URL: mongodb://mongo:27017
+      DB_DATABASE: daftarproperty
+      BLOCKCHAIN_PROVIDER_URL: ganache.daftarproperti.org
+      DP_ABI_VERSION: "1"
+      COLLECTION_NAME: properties
+      ERROR_NOTIF_CHANNEL: ""
+      SLACK_WEBHOOK_UR: ""
+      DP_CONTRACT_ADDRESS: 0xD5FbDbd20cf80521fAF9c7968a35b79959BF5F51
+
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
       - mongo
     environment:
-      - DB_URL=mongodb://mongo:27017
-      - DB_DATABASE=daftarproperty
-      - BLOCKCHAIN_PROVIDER_URL:ganache.daftarproperti.org
-      - DP_ABI_VERSION:1
-      - COLLECTION_NAME:properties
-      - ERROR_NOTIF_CHANNEL:''
-      - SLACK_WEBHOOK_UR:''
-      - DP_CONTRACT_ADDRESS:0xD5FbDbd20cf80521fAF9c7968a35b79959BF5F51
+      DB_URL: mongodb://mongo:27017
+      DB_DATABASE: daftarproperty
+      BLOCKCHAIN_PROVIDER_URL: ganache.daftarproperti.org
+      DP_ABI_VERSION: "1"
+      COLLECTION_NAME: properties
+      ERROR_NOTIF_CHANNEL: ""
+      SLACK_WEBHOOK_UR: ""
+      DP_CONTRACT_ADDRESS: 0xD5FbDbd20cf80521fAF9c7968a35b79959BF5F51
 
   mongo:
     image: mongo:6.0.16
