@@ -231,7 +231,7 @@ async function seedPropertyPrices() {
 // Correctly handle async errors
 (async () => {
   try {
-    await seedDummyProperties();
+    // await seedDummyProperties();
     await seedCities();
     await seedLotSizes();
     await seedSorts();
