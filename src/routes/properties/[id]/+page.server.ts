@@ -2,13 +2,14 @@ import { connectToDatabase } from '$lib/db/client.ts';
 import { error } from '@sveltejs/kit';
 import type { LoadEvent } from '@sveltejs/kit';
 import { ObjectId, Long } from 'mongodb';
-import { REVEAL_BASE_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import type { Property } from '$lib/types/property.ts';
 
 export const load = async ({ params, url }: LoadEvent) => {
   const db = await connectToDatabase();
   const id = params.id ?? '';
   const instagramUrl = 'https://www.instagram.com/moruma.id/?igshid=YmMyMTA2M2Y=';
+  const REVEAL_BASE_URL = env.REVEAL_BASE_URL || '';
   // const whatsappApiUrl = 'https://api.whatsapp.com/send?phone=628175175118&text='
   // const message = `Saya tertarik dengan properti ini: ${url.href}`;
   // const whatsappUrl = `${whatsappApiUrl}${encodeURIComponent(message)}`;
