@@ -20,12 +20,12 @@ jobs:
 
       - name: Copy repo to VPS
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@45.110.15.12 "mkdir -p /home/ubuntu/new-moruma"
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@45.110.15.12:/home/ubuntu/new-moruma
+          ssh -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "mkdir -p /home/ubuntu/new-moruma"
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@47.130.15.129:/home/ubuntu/new-moruma
 
       - name: Deploy on VPS
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@45.110.15.12 << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@47.130.15.129 << 'EOF'
             cd /home/ubuntu/new-moruma
             docker-compose down
             docker-compose up -d --build
