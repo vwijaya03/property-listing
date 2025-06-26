@@ -89,7 +89,7 @@ async function seedCities() {
   await citiesCollection.deleteMany({});
 
   // Extract unique cityId + cityName from properties collection
-  const uniqueCities = await db.collection('dummy-properties').aggregate([
+  const uniqueCities = await db.collection('properties').aggregate([
     {
       $group: {
         _id: {
