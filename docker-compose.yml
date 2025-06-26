@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3002:3002"
     environment:
       DB_URL: mongodb+srv://shareuser:3lZZIJuv5sqfNNGJ@devshared.iya8g91.mongodb.net
       DB_DATABASE: shareprop
