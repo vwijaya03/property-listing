@@ -18,6 +18,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VPS_KEY }}
 
+      - name: Fix folder ownership before sync
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "sudo chown -R ubuntu:ubuntu /home/ubuntu/new-moruma || true"
+
       - name: Copy repo to VPS
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "mkdir -p /home/ubuntu/new-moruma"
