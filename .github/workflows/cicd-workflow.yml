@@ -42,12 +42,12 @@ jobs:
 
       - name: Fix folder ownership before sync
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "sudo chown -R ubuntu:ubuntu /home/ubuntu/new-moruma || true"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "sudo chown -R ubuntu:ubuntu /home/ubuntu/new-moruma || true"
 
       - name: Copy repo to VPS
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "mkdir -p /home/ubuntu/new-moruma"
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@47.130.15.129:/home/ubuntu/new-moruma
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "mkdir -p /home/ubuntu/new-moruma"
+          rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" ./ ubuntu@47.130.15.129:/home/ubuntu/new-moruma
 
       - name: Run Terraform apply for provisioning
         run: |
