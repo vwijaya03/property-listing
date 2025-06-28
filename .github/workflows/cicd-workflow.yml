@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/khadkaray/ansible-terraform:latest
+
     env:
       SSH_KEY_FILE: ~/.ssh/id_rsa
 
