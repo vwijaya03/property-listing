@@ -25,20 +25,19 @@ jobs:
           echo "${{ secrets.VPS_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Add SSH key to agent
-        run: |
-          apt-get update && apt-get install -y openssh-client
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
-
-      - name: Install Terraform & Ansible
+      - name: Install all prerequisites
         run: |
           apt-get update
-          apt-get install -y software-properties-common curl unzip gnupg2 ssh python3-pip
+          apt-get install -y software-properties-common curl unzip gnupg2 ssh python3-pip rsync openssh-client
           pip3 install --break-system-packages ansible
           curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com noble main" > /etc/apt/sources.list.d/hashicorp.list
           apt-get update && apt-get install -y terraform
+
+      - name: Add SSH key to agent
+        run: |
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
 
       - name: Fix folder ownership before sync
         run: |
