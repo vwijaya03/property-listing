@@ -27,6 +27,7 @@ jobs:
 
       - name: Add SSH key to agent
         run: |
+          apt-get update && apt-get install -y openssh-client
           eval $(ssh-agent -s)
           ssh-add ~/.ssh/id_rsa
 
