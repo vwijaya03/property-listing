@@ -13,7 +13,7 @@ jobs:
       options: --entrypoint /bin/bash
 
     env:
-      SSH_KEY_FILE: /root/.ssh/id_rsa
+      SSH_KEY_PATH: /root/.ssh/id_rsa
 
     steps:
       - name: Checkout code
@@ -22,8 +22,8 @@ jobs:
       - name: Setup SSH key file
         run: |
           mkdir -p /root/.ssh
-          echo "${{ secrets.VPS_KEY }}" > $SSH_KEY_FILE
-          chmod 600 $SSH_KEY_FILE
+          echo "${{ secrets.VPS_KEY }}" > $SSH_KEY_PATH
+          chmod 600 $SSH_KEY_PATH
 
       - name: Install all prerequisites
         run: |
@@ -37,16 +37,16 @@ jobs:
       - name: Add SSH key to agent
         run: |
           eval $(ssh-agent -s)
-          ssh-add $SSH_KEY_FILE
+          ssh-add $SSH_KEY_PATH
 
       - name: Fix folder ownership before sync
         run: |
-          ssh -i $SSH_KEY_FILE -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "sudo chown -R ubuntu:ubuntu /home/ubuntu/new-moruma || true"
+          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "sudo chown -R ubuntu:ubuntu /home/ubuntu/new-moruma || true"
 
       - name: Copy repo to VPS
         run: |
-          ssh -i $SSH_KEY_FILE -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "mkdir -p /home/ubuntu/new-moruma"
-          rsync -avz --delete -e "ssh -i $SSH_KEY_FILE -o StrictHostKeyChecking=no" ./ ubuntu@47.130.15.129:/home/ubuntu/new-moruma
+          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no ubuntu@47.130.15.129 "mkdir -p /home/ubuntu/new-moruma"
+          rsync -avz --delete -e "ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no" ./ ubuntu@47.130.15.129:/home/ubuntu/new-moruma
 
       - name: Run Terraform apply for provisioning
         run: |
