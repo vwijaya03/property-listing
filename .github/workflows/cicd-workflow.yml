@@ -9,8 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: hashicorp/terraform:1.8.5
-      options: --entrypoint /bin/sh
+      image: ubuntu:24.04
+      options: --entrypoint /bin/bash
 
     env:
       SSH_KEY_FILE: ~/.ssh/id_rsa
@@ -25,11 +25,14 @@ jobs:
           echo "${{ secrets.VPS_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Install Ansible & prerequisites
+      - name: Install Terraform & Ansible
         run: |
           apt-get update
-          apt-get install -y python3-pip ssh
+          apt-get install -y software-properties-common curl unzip gnupg2 ssh python3-pip
           pip3 install ansible
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com noble main" > /etc/apt/sources.list.d/hashicorp.list
+          apt-get update && apt-get install -y terraform
 
       - name: Fix folder ownership before sync
         run: |
