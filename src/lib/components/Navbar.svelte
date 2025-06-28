@@ -23,7 +23,7 @@
         <!-- Navigation -->
         <nav id="navigation" class="style-1">
           <ul id="responsive">
-            <li><a href="/">Cari Properti Testing</a></li>
+            <li><a href="/">Cari Properti</a></li>
           </ul>
           <ul id="responsive">
             <li><a href="/contact">Hubungi</a></li>

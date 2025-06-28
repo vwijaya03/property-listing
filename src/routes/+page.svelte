@@ -126,6 +126,12 @@
     selectedSort = urlParams.get('sort') || '';
     q = urlParams.get('q') || '';
 	});
+
+  $effect(() => {
+    if (selectedSort === '' && sorts.length > 0) {
+      selectedSort = sorts[0].value || '';
+    }
+  });
 </script>
 
 <style>
@@ -455,17 +461,19 @@
                 <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3 py-0" for="inputGroupSelect01">
                   <i class="fas fa-align-left fs-16 pr-2"></i>Sort by:
                 </label>
-                <select
-                  class="nice-select
-                  form-control border-0 bg-transparent shadow-none p-0 m-0 h-auto" 
-                  name="sortby"
-                  onchange={handleSortChange}
-                  bind:value={selectedSort}
-                >
-                  {#each sorts as sort}
-                    <option value={sort.value}>{sort.title}</option>
-                  {/each}
-                </select>
+                {#if selectedSort !== ''}
+                  <select
+                    class="nice-select
+                    form-control border-0 bg-transparent shadow-none p-0 m-0 h-auto" 
+                    name="sortby"
+                    onchange={handleSortChange}
+                    bind:value={selectedSort}
+                  >
+                    {#each sorts as sort}
+                      <option value={sort.value}>{sort.title}</option>
+                    {/each}
+                  </select>
+                {/if}
               </div>
             </div>
           </div>
