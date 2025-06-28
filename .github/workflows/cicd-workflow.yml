@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: hashicorp/terraform:1.8.5-cli
+      image: hashicorp/terraform:1.8.5
       options: --entrypoint /bin/sh
 
     env:
@@ -25,9 +25,10 @@ jobs:
           echo "${{ secrets.VPS_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Install Ansible
+      - name: Install Ansible & prerequisites
         run: |
-          apk add --no-cache py3-pip bash openssh-client
+          apt-get update
+          apt-get install -y python3-pip ssh
           pip3 install ansible
 
       - name: Fix folder ownership before sync
