@@ -15,6 +15,8 @@ interface PageData {
   sorts: Sort[];
 }
 
+export const ssr = false;
+
 export const load = async ({ url }: LoadEvent): Promise<PageData> => {
   const ITEMS_PER_PAGE = 10;
   const page = parseInt(url.searchParams.get('page') || '1');
