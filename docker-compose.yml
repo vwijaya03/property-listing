@@ -7,16 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
-    environment:
-      DB_URL: mongodb+srv://shareuser:3lZZIJuv5sqfNNGJ@devshared.iya8g91.mongodb.net
-      DB_DATABASE: shareprop
-      BLOCKCHAIN_PROVIDER_URL: ganache.daftarproperti.org
-      DP_ABI_VERSION: "1"
-      COLLECTION_NAME: properties
-      ERROR_NOTIF_CHANNEL: ""
-      SLACK_WEBHOOK_UR: ""
-      DP_CONTRACT_ADDRESS: 0xD5FbDbd20cf80521fAF9c7968a35b79959BF5F51
-      REVEAL_BASE_URL: "https://reveal.daftarproperti.org"
+    env_file:
+      - ./synchronizer/.env
 
   app:
     build:
@@ -24,16 +16,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3002:3000"
-    environment:
-      DB_URL: mongodb+srv://shareuser:3lZZIJuv5sqfNNGJ@devshared.iya8g91.mongodb.net
-      DB_DATABASE: shareprop
-      BLOCKCHAIN_PROVIDER_URL: ganache.daftarproperti.org
-      DP_ABI_VERSION: "1"
-      COLLECTION_NAME: properties
-      ERROR_NOTIF_CHANNEL: ""
-      SLACK_WEBHOOK_UR: ""
-      DP_CONTRACT_ADDRESS: 0xD5FbDbd20cf80521fAF9c7968a35b79959BF5F51
-      REVEAL_BASE_URL: "https://reveal.daftarproperti.org"
+    env_file:
+      - .env
 
   # mongo:
   #   image: mongo:6.0.16

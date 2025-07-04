@@ -24,6 +24,21 @@ jobs:
           mkdir -p /root/.ssh
           echo "${{ secrets.VPS_KEY }}" > $SSH_KEY_PATH
           chmod 600 $SSH_KEY_PATH
+      
+      - name: Create .env files for app and worker
+        run: |
+          for path in . ./synchronizer; do
+            mkdir -p "$path"
+            echo "DB_URL=${{ secrets.DB_URL }}" > "$path/.env"
+            echo "DB_DATABASE=shareprop" >> "$path/.env"
+            echo "BLOCKCHAIN_PROVIDER_URL=ganache.daftarproperti.org" >> "$path/.env"
+            echo "DP_ABI_VERSION=1" >> "$path/.env"
+            echo "COLLECTION_NAME=properties" >> "$path/.env"
+            echo "ERROR_NOTIF_CHANNEL=" >> "$path/.env"
+            echo "SLACK_WEBHOOK_UR=" >> "$path/.env"
+            echo "DP_CONTRACT_ADDRESS=0xD5FbDbd20cf80521fAF9c7968a35b79959BF5F51" >> "$path/.env"
+            echo "REVEAL_BASE_URL=https://reveal.daftarproperti.org" >> "$path/.env"
+          done
 
       - name: Install all prerequisites
         run: |
